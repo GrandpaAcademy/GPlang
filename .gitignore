@@ -1,0 +1,93 @@
+# Build directories
+build/
+*.o
+*.so
+*.a
+
+# Compiled binaries
+gplang
+gap
+*.exe
+
+# Temporary files
+*.tmp
+*.temp
+*~
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Test outputs
+test_output/
+*.test
+
+# Generated files
+*.ir
+*.s
+*.asm
+
+# Log files
+*.log
+
+# Configuration files (keep examples)
+config.json
+settings.json
+
+# OS specific
+Thumbs.db
+.directory
+
+# Backup files
+*.bak
+*.backup
+
+# Core dumps
+core
+core.*
+
+# Documentation build
+docs/_build/
+docs/html/
+docs/latex/
+
+# Package files
+*.tar.gz
+*.zip
+*.deb
+*.rpm
+
+# Runtime files
+*.pid
+*.lock
+
+# Coverage reports
+coverage/
+*.gcov
+*.gcda
+*.gcno
+
+# Profiling data
+gmon.out
+*.prof
+
+# Memory debugging
+valgrind-*.log
+*.memcheck
+
+# Editor temporary files
+.#*
+\#*#
+
+# Local development
+local/
+scratch/
+playground/
+
+# System monitor outputs
+system_monitor_*.json
+gplang_config.json
+gplang_test*
