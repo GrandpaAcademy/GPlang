@@ -94,16 +94,42 @@ typedef struct {
 } Vector2D;
 
 Vector2D gp_vec2_create(double x, double y);
+Vector2D gp_vec2_zero(void);
+Vector2D gp_vec2_one(void);
+Vector2D gp_vec2_unit_x(void);
+Vector2D gp_vec2_unit_y(void);
 Vector2D gp_vec2_add(Vector2D a, Vector2D b);
 Vector2D gp_vec2_sub(Vector2D a, Vector2D b);
 Vector2D gp_vec2_mul(Vector2D v, double scalar);
 Vector2D gp_vec2_div(Vector2D v, double scalar);
+Vector2D gp_vec2_mul_vec(Vector2D a, Vector2D b);  // Component-wise multiplication
+Vector2D gp_vec2_div_vec(Vector2D a, Vector2D b);  // Component-wise division
 double gp_vec2_dot(Vector2D a, Vector2D b);
 double gp_vec2_cross(Vector2D a, Vector2D b);
 double gp_vec2_length(Vector2D v);
+double gp_vec2_length_squared(Vector2D v);
 double gp_vec2_distance(Vector2D a, Vector2D b);
+double gp_vec2_distance_squared(Vector2D a, Vector2D b);
 Vector2D gp_vec2_normalize(Vector2D v);
 Vector2D gp_vec2_rotate(Vector2D v, double angle);
+Vector2D gp_vec2_rotate_around(Vector2D v, Vector2D center, double angle);
+Vector2D gp_vec2_reflect(Vector2D v, Vector2D normal);
+Vector2D gp_vec2_project(Vector2D v, Vector2D onto);
+Vector2D gp_vec2_reject(Vector2D v, Vector2D onto);
+Vector2D gp_vec2_lerp(Vector2D a, Vector2D b, double t);
+Vector2D gp_vec2_slerp(Vector2D a, Vector2D b, double t);  // Spherical linear interpolation
+Vector2D gp_vec2_perpendicular(Vector2D v);
+Vector2D gp_vec2_clamp_magnitude(Vector2D v, double max_length);
+double gp_vec2_angle(Vector2D v);
+double gp_vec2_angle_between(Vector2D a, Vector2D b);
+bool gp_vec2_equals(Vector2D a, Vector2D b, double epsilon);
+bool gp_vec2_is_zero(Vector2D v, double epsilon);
+bool gp_vec2_is_normalized(Vector2D v, double epsilon);
+Vector2D gp_vec2_abs(Vector2D v);
+Vector2D gp_vec2_min(Vector2D a, Vector2D b);
+Vector2D gp_vec2_max(Vector2D a, Vector2D b);
+Vector2D gp_vec2_clamp(Vector2D v, Vector2D min_vec, Vector2D max_vec);
+char* gp_vec2_to_string(Vector2D v);
 
 // Vector operations (3D)
 typedef struct {
@@ -111,15 +137,68 @@ typedef struct {
 } Vector3D;
 
 Vector3D gp_vec3_create(double x, double y, double z);
+Vector3D gp_vec3_zero(void);
+Vector3D gp_vec3_one(void);
+Vector3D gp_vec3_unit_x(void);
+Vector3D gp_vec3_unit_y(void);
+Vector3D gp_vec3_unit_z(void);
+Vector3D gp_vec3_forward(void);   // (0, 0, 1)
+Vector3D gp_vec3_back(void);      // (0, 0, -1)
+Vector3D gp_vec3_up(void);        // (0, 1, 0)
+Vector3D gp_vec3_down(void);      // (0, -1, 0)
+Vector3D gp_vec3_right(void);     // (1, 0, 0)
+Vector3D gp_vec3_left(void);      // (-1, 0, 0)
 Vector3D gp_vec3_add(Vector3D a, Vector3D b);
 Vector3D gp_vec3_sub(Vector3D a, Vector3D b);
 Vector3D gp_vec3_mul(Vector3D v, double scalar);
 Vector3D gp_vec3_div(Vector3D v, double scalar);
+Vector3D gp_vec3_mul_vec(Vector3D a, Vector3D b);  // Component-wise multiplication
+Vector3D gp_vec3_div_vec(Vector3D a, Vector3D b);  // Component-wise division
 double gp_vec3_dot(Vector3D a, Vector3D b);
 Vector3D gp_vec3_cross(Vector3D a, Vector3D b);
 double gp_vec3_length(Vector3D v);
+double gp_vec3_length_squared(Vector3D v);
 double gp_vec3_distance(Vector3D a, Vector3D b);
+double gp_vec3_distance_squared(Vector3D a, Vector3D b);
 Vector3D gp_vec3_normalize(Vector3D v);
+Vector3D gp_vec3_reflect(Vector3D v, Vector3D normal);
+Vector3D gp_vec3_project(Vector3D v, Vector3D onto);
+Vector3D gp_vec3_reject(Vector3D v, Vector3D onto);
+Vector3D gp_vec3_lerp(Vector3D a, Vector3D b, double t);
+Vector3D gp_vec3_slerp(Vector3D a, Vector3D b, double t);
+Vector3D gp_vec3_clamp_magnitude(Vector3D v, double max_length);
+double gp_vec3_angle_between(Vector3D a, Vector3D b);
+bool gp_vec3_equals(Vector3D a, Vector3D b, double epsilon);
+bool gp_vec3_is_zero(Vector3D v, double epsilon);
+bool gp_vec3_is_normalized(Vector3D v, double epsilon);
+Vector3D gp_vec3_abs(Vector3D v);
+Vector3D gp_vec3_min(Vector3D a, Vector3D b);
+Vector3D gp_vec3_max(Vector3D a, Vector3D b);
+Vector3D gp_vec3_clamp(Vector3D v, Vector3D min_vec, Vector3D max_vec);
+Vector3D gp_vec3_rotate_x(Vector3D v, double angle);
+Vector3D gp_vec3_rotate_y(Vector3D v, double angle);
+Vector3D gp_vec3_rotate_z(Vector3D v, double angle);
+Vector3D gp_vec3_rotate_axis(Vector3D v, Vector3D axis, double angle);
+char* gp_vec3_to_string(Vector3D v);
+
+// Vector4D for homogeneous coordinates
+typedef struct {
+    double x, y, z, w;
+} Vector4D;
+
+Vector4D gp_vec4_create(double x, double y, double z, double w);
+Vector4D gp_vec4_zero(void);
+Vector4D gp_vec4_one(void);
+Vector4D gp_vec4_add(Vector4D a, Vector4D b);
+Vector4D gp_vec4_sub(Vector4D a, Vector4D b);
+Vector4D gp_vec4_mul(Vector4D v, double scalar);
+Vector4D gp_vec4_div(Vector4D v, double scalar);
+double gp_vec4_dot(Vector4D a, Vector4D b);
+double gp_vec4_length(Vector4D v);
+Vector4D gp_vec4_normalize(Vector4D v);
+Vector3D gp_vec4_to_vec3(Vector4D v);  // Perspective divide
+Vector4D gp_vec3_to_vec4(Vector3D v, double w);
+char* gp_vec4_to_string(Vector4D v);
 
 // Matrix operations (2x2)
 typedef struct {

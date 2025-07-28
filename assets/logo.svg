@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient definitions -->
+    <linearGradient id="primaryGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#EC4899;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="accentGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#10B981;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
+    </linearGradient>
+    
+    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#FFFFFF;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#FFFFFF;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Drop shadow filter -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="4" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+    
+    <!-- Glow effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle with gradient -->
+  <circle cx="100" cy="100" r="95" fill="url(#primaryGradient)" filter="url(#dropShadow)" opacity="0.9"/>
+  
+  <!-- Inner circle for depth -->
+  <circle cx="100" cy="100" r="85" fill="none" stroke="url(#accentGradient)" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Main GP letters -->
+  <g filter="url(#glow)">
+    <!-- Letter G -->
+    <path d="M 45 60 
+             C 35 60, 25 70, 25 85
+             L 25 115
+             C 25 130, 35 140, 50 140
+             L 70 140
+             C 75 140, 80 135, 80 130
+             L 80 115
+             L 65 115
+             L 65 125
+             L 55 125
+             C 45 125, 40 120, 40 110
+             L 40 90
+             C 40 80, 45 75, 55 75
+             L 70 75
+             L 70 60
+             Z" 
+          fill="#FFFFFF" 
+          stroke="url(#accentGradient)" 
+          stroke-width="1"/>
+    
+    <!-- Letter P -->
+    <path d="M 95 60
+             L 95 140
+             L 110 140
+             L 110 105
+             L 125 105
+             C 135 105, 145 95, 145 85
+             L 145 80
+             C 145 70, 135 60, 125 60
+             Z
+             M 110 75
+             L 125 75
+             C 130 75, 130 80, 130 85
+             C 130 90, 125 90, 125 90
+             L 110 90
+             Z" 
+          fill="#FFFFFF" 
+          stroke="url(#accentGradient)" 
+          stroke-width="1"/>
+  </g>
+  
+  <!-- Speed lines to represent performance -->
+  <g opacity="0.7">
+    <line x1="160" y1="70" x2="180" y2="65" stroke="url(#accentGradient)" stroke-width="3" stroke-linecap="round"/>
+    <line x1="165" y1="85" x2="185" y2="80" stroke="url(#accentGradient)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="160" y1="100" x2="180" y2="95" stroke="url(#accentGradient)" stroke-width="3" stroke-linecap="round"/>
+    <line x1="165" y1="115" x2="185" y2="110" stroke="url(#accentGradient)" stroke-width="2" stroke-linecap="round"/>
+    <line x1="160" y1="130" x2="180" y2="125" stroke="url(#accentGradient)" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Decorative code brackets -->
+  <g opacity="0.5" fill="none" stroke="#FFFFFF" stroke-width="2">
+    <path d="M 20 50 L 15 55 L 15 145 L 20 150"/>
+    <path d="M 180 50 L 185 55 L 185 145 L 180 150"/>
+  </g>
+  
+  <!-- Small decorative dots representing optimization -->
+  <g fill="url(#accentGradient)" opacity="0.8">
+    <circle cx="30" cy="30" r="2"/>
+    <circle cx="170" cy="30" r="2"/>
+    <circle cx="30" cy="170" r="2"/>
+    <circle cx="170" cy="170" r="2"/>
+  </g>
+  
+  <!-- Subtle glow overlay -->
+  <circle cx="100" cy="100" r="95" fill="url(#glowGradient)" opacity="0.3"/>
+  
+  <!-- Text below logo -->
+  <text x="100" y="185" 
+        font-family="Arial, sans-serif" 
+        font-size="12" 
+        font-weight="bold" 
+        text-anchor="middle" 
+        fill="#4F46E5">
+    GPLANG
+  </text>
+</svg>

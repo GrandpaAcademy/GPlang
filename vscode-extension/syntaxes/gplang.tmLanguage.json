@@ -1,0 +1,231 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "GPLANG",
+  "scopeName": "source.gplang",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#functions"
+    },
+    {
+      "include": "#variables"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#imports"
+    },
+    {
+      "include": "#types"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.number-sign.gplang",
+          "match": "#.*$"
+        },
+        {
+          "name": "comment.block.gplang",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.gplang",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.gplang",
+              "match": "\\\\."
+            }
+          ]
+        },
+        {
+          "name": "string.quoted.single.gplang",
+          "begin": "'",
+          "end": "'",
+          "patterns": [
+            {
+              "name": "constant.character.escape.gplang",
+              "match": "\\\\."
+            }
+          ]
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.gplang",
+          "match": "\\b\\d+\\.\\d+([eE][+-]?\\d+)?\\b"
+        },
+        {
+          "name": "constant.numeric.integer.gplang",
+          "match": "\\b\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.hex.gplang",
+          "match": "\\b0[xX][0-9a-fA-F]+\\b"
+        },
+        {
+          "name": "constant.numeric.binary.gplang",
+          "match": "\\b0[bB][01]+\\b"
+        },
+        {
+          "name": "constant.numeric.octal.gplang",
+          "match": "\\b0[oO][0-7]+\\b"
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.gplang",
+          "match": "\\b(if|else|elif|while|for|in|break|continue|return|match|case|default|try|catch|finally|throw|with|async|await|yield|defer)\\b"
+        },
+        {
+          "name": "keyword.declaration.gplang",
+          "match": "\\b(func|var|const|let|class|struct|enum|interface|trait|impl|type|alias)\\b"
+        },
+        {
+          "name": "keyword.modifier.gplang",
+          "match": "\\b(public|private|protected|static|final|abstract|virtual|override|extern|inline|pure|safe|unsafe)\\b"
+        },
+        {
+          "name": "keyword.operator.gplang",
+          "match": "\\b(and|or|not|is|in|as|typeof|sizeof|alignof)\\b"
+        },
+        {
+          "name": "constant.language.gplang",
+          "match": "\\b(true|false|null|undefined|nil|self|super|this)\\b"
+        }
+      ]
+    },
+    "functions": {
+      "patterns": [
+        {
+          "name": "entity.name.function.gplang",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()"
+        },
+        {
+          "name": "keyword.declaration.function.gplang",
+          "begin": "\\b(func)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.gplang"
+            },
+            "2": {
+              "name": "entity.name.function.gplang"
+            }
+          },
+          "end": "(?=\\{|:)",
+          "patterns": [
+            {
+              "include": "#types"
+            },
+            {
+              "include": "#variables"
+            }
+          ]
+        }
+      ]
+    },
+    "variables": {
+      "patterns": [
+        {
+          "name": "variable.other.gplang",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.arithmetic.gplang",
+          "match": "\\+|\\-|\\*|\\/|\\%|\\*\\*"
+        },
+        {
+          "name": "keyword.operator.comparison.gplang",
+          "match": "==|!=|<|>|<=|>=|<=>|==="
+        },
+        {
+          "name": "keyword.operator.logical.gplang",
+          "match": "&&|\\|\\||!"
+        },
+        {
+          "name": "keyword.operator.bitwise.gplang",
+          "match": "&|\\||\\^|~|<<|>>"
+        },
+        {
+          "name": "keyword.operator.assignment.gplang",
+          "match": "=|\\+=|\\-=|\\*=|\\/=|\\%=|&=|\\|=|\\^=|<<=|>>="
+        },
+        {
+          "name": "keyword.operator.other.gplang",
+          "match": "\\?|:|\\.|\\->"
+        }
+      ]
+    },
+    "imports": {
+      "patterns": [
+        {
+          "name": "keyword.control.import.gplang",
+          "begin": "\\b(import|from|use)\\b",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.control.import.gplang"
+            }
+          },
+          "end": "$",
+          "patterns": [
+            {
+              "name": "string.unquoted.import.gplang",
+              "match": "[a-zA-Z_][a-zA-Z0-9_]*"
+            },
+            {
+              "include": "#strings"
+            }
+          ]
+        }
+      ]
+    },
+    "types": {
+      "patterns": [
+        {
+          "name": "storage.type.primitive.gplang",
+          "match": "\\b(int|float|double|bool|char|string|void|any|object)\\b"
+        },
+        {
+          "name": "storage.type.collection.gplang",
+          "match": "\\b(array|list|map|set|dict|tuple|vector|matrix)\\b"
+        },
+        {
+          "name": "storage.type.advanced.gplang",
+          "match": "\\b(optional|result|future|promise|channel|mutex|atomic)\\b"
+        },
+        {
+          "name": "entity.name.type.gplang",
+          "match": "\\b[A-Z][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    }
+  }
+}

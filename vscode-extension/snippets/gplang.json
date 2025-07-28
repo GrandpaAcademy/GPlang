@@ -1,0 +1,201 @@
+{
+  "Function": {
+    "prefix": "func",
+    "body": [
+      "func ${1:function_name}(${2:parameters}):",
+      "\t${3:# Function body}",
+      "\treturn ${4:value}",
+      ""
+    ],
+    "description": "Create a new function"
+  },
+  "Main Function": {
+    "prefix": "main",
+    "body": [
+      "func main():",
+      "\t${1:# Main function body}",
+      "\treturn 0",
+      ""
+    ],
+    "description": "Create main function"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if ${1:condition}:",
+      "\t${2:# if body}",
+      ""
+    ],
+    "description": "If statement"
+  },
+  "If-Else Statement": {
+    "prefix": "ifelse",
+    "body": [
+      "if ${1:condition}:",
+      "\t${2:# if body}",
+      "else:",
+      "\t${3:# else body}",
+      ""
+    ],
+    "description": "If-else statement"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:iterable}:",
+      "\t${3:# loop body}",
+      ""
+    ],
+    "description": "For loop"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition}:",
+      "\t${2:# loop body}",
+      ""
+    ],
+    "description": "While loop"
+  },
+  "Class": {
+    "prefix": "class",
+    "body": [
+      "class ${1:ClassName}:",
+      "\tfunc __init__(self${2:, parameters}):",
+      "\t\t${3:# Constructor body}",
+      "",
+      "\tfunc ${4:method_name}(self${5:, parameters}):",
+      "\t\t${6:# Method body}",
+      ""
+    ],
+    "description": "Create a new class"
+  },
+  "Import": {
+    "prefix": "import",
+    "body": [
+      "import ${1:module_name}",
+      ""
+    ],
+    "description": "Import statement"
+  },
+  "Variable Declaration": {
+    "prefix": "var",
+    "body": [
+      "var ${1:variable_name} = ${2:value}",
+      ""
+    ],
+    "description": "Variable declaration"
+  },
+  "Constant Declaration": {
+    "prefix": "const",
+    "body": [
+      "const ${1:CONSTANT_NAME} = ${2:value}",
+      ""
+    ],
+    "description": "Constant declaration"
+  },
+  "Try-Catch": {
+    "prefix": "try",
+    "body": [
+      "try:",
+      "\t${1:# try body}",
+      "catch ${2:Exception} as ${3:e}:",
+      "\t${4:# catch body}",
+      ""
+    ],
+    "description": "Try-catch block"
+  },
+  "Match Statement": {
+    "prefix": "match",
+    "body": [
+      "match ${1:value}:",
+      "\tcase ${2:pattern1}:",
+      "\t\t${3:# case 1 body}",
+      "\tcase ${4:pattern2}:",
+      "\t\t${5:# case 2 body}",
+      "\tdefault:",
+      "\t\t${6:# default body}",
+      ""
+    ],
+    "description": "Match statement"
+  },
+  "Async Function": {
+    "prefix": "async",
+    "body": [
+      "async func ${1:function_name}(${2:parameters}):",
+      "\t${3:# Async function body}",
+      "\treturn ${4:value}",
+      ""
+    ],
+    "description": "Async function"
+  },
+  "Print Statement": {
+    "prefix": "print",
+    "body": [
+      "print(${1:\"Hello, World!\"})",
+      ""
+    ],
+    "description": "Print statement"
+  },
+  "Comment Block": {
+    "prefix": "comment",
+    "body": [
+      "/*",
+      " * ${1:Comment description}",
+      " * Author: ${2:Your Name}",
+      " * Date: ${3:Date}",
+      " */",
+      ""
+    ],
+    "description": "Multi-line comment block"
+  },
+  "Performance Optimized Loop": {
+    "prefix": "fastfor",
+    "body": [
+      "# Ultra-fast optimized loop",
+      "parallel for ${1:i} in range(${2:0}, ${3:1000000}):",
+      "\t${4:# High-performance loop body}",
+      ""
+    ],
+    "description": "Performance optimized parallel loop"
+  },
+  "Vector2D": {
+    "prefix": "vec2",
+    "body": [
+      "var ${1:vector} = math.vec2_create(${2:x}, ${3:y})",
+      ""
+    ],
+    "description": "Create 2D vector"
+  },
+  "Vector3D": {
+    "prefix": "vec3",
+    "body": [
+      "var ${1:vector} = math.vec3_create(${2:x}, ${3:y}, ${4:z})",
+      ""
+    ],
+    "description": "Create 3D vector"
+  },
+  "WebSocket Connection": {
+    "prefix": "websocket",
+    "body": [
+      "var ${1:ws} = websocket.create(\"${2:ws://localhost:8080}\")",
+      "websocket.on_message(${1:ws}, func(message):",
+      "\tprint(\"Received: \" + message)",
+      ")",
+      "websocket.connect(${1:ws})",
+      ""
+    ],
+    "description": "WebSocket connection setup"
+  },
+  "GraphQL Query": {
+    "prefix": "graphql",
+    "body": [
+      "var ${1:client} = graphql.client_create(\"${2:https://api.example.com/graphql}\")",
+      "var ${3:query} = graphql.query_create(\"query\", \"${4:GetData}\")",
+      "graphql.query_add_selection(${3:query}, \"${5:field}\", null)",
+      "var ${6:response} = graphql.execute(${1:client}, ${3:query}, null)",
+      ""
+    ],
+    "description": "GraphQL query setup"
+  }
+}

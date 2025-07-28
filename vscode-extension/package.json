@@ -1,0 +1,168 @@
+{
+  "name": "gplang",
+  "displayName": "GPLANG Language Support",
+  "description": "Syntax highlighting and language support for GPLANG - The fastest programming language",
+  "version": "1.0.0",
+  "publisher": "gplang-team",
+  "icon": "images/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gplang/gplang"
+  },
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Syntax Highlighting",
+    "Snippets"
+  ],
+  "keywords": [
+    "gplang",
+    "programming",
+    "language",
+    "fast",
+    "performance",
+    "syntax",
+    "highlighting"
+  ],
+  "activationEvents": [
+    "onLanguage:gplang"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "gplang",
+        "aliases": [
+          "GPLANG",
+          "gplang"
+        ],
+        "extensions": [
+          ".gp"
+        ],
+        "configuration": "./language-configuration.json",
+        "icon": {
+          "light": "./images/file-icon-light.svg",
+          "dark": "./images/file-icon-dark.svg"
+        }
+      }
+    ],
+    "grammars": [
+      {
+        "language": "gplang",
+        "scopeName": "source.gplang",
+        "path": "./syntaxes/gplang.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "gplang",
+        "path": "./snippets/gplang.json"
+      }
+    ],
+    "themes": [
+      {
+        "label": "GPLANG Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/gplang-dark.json"
+      },
+      {
+        "label": "GPLANG Light",
+        "uiTheme": "vs",
+        "path": "./themes/gplang-light.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "gplang.compile",
+        "title": "Compile GPLANG File",
+        "category": "GPLANG"
+      },
+      {
+        "command": "gplang.run",
+        "title": "Run GPLANG File",
+        "category": "GPLANG"
+      },
+      {
+        "command": "gplang.optimize",
+        "title": "Optimize GPLANG File",
+        "category": "GPLANG"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "gplang.compile",
+        "key": "ctrl+shift+b",
+        "when": "editorLangId == gplang"
+      },
+      {
+        "command": "gplang.run",
+        "key": "ctrl+f5",
+        "when": "editorLangId == gplang"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "editorLangId == gplang",
+          "command": "gplang.compile",
+          "group": "gplang"
+        },
+        {
+          "when": "editorLangId == gplang",
+          "command": "gplang.run",
+          "group": "gplang"
+        },
+        {
+          "when": "editorLangId == gplang",
+          "command": "gplang.optimize",
+          "group": "gplang"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "GPLANG Configuration",
+      "properties": {
+        "gplang.compilerPath": {
+          "type": "string",
+          "default": "gplang",
+          "description": "Path to the GPLANG compiler"
+        },
+        "gplang.optimizationLevel": {
+          "type": "string",
+          "enum": [
+            "none",
+            "basic",
+            "aggressive",
+            "extreme",
+            "ultra"
+          ],
+          "default": "aggressive",
+          "description": "Optimization level for compilation"
+        },
+        "gplang.enableLinting": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable real-time linting"
+        },
+        "gplang.showPerformanceHints": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show performance optimization hints"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.74.0",
+    "@types/node": "16.x",
+    "typescript": "^4.9.4"
+  }
+}
