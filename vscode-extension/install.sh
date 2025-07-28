@@ -37,6 +37,10 @@ mkdir -p images
 cp ../assets/logo.svg images/icon.png 2>/dev/null || echo "⚠️  Logo not found, using default icon"
 
 echo "📦 Packaging extension..."
+if ! command -v vsce &> /dev/null; then
+    echo "📦 Installing vsce globally..."
+    npm install -g @vscode/vsce
+fi
 vsce package
 
 # Get the generated .vsix file

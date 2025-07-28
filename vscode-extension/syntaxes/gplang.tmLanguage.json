@@ -127,7 +127,7 @@
         },
         {
           "name": "keyword.declaration.function.gplang",
-          "begin": "\\b(func)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "begin": "\\b(func|fun|fu)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
           "beginCaptures": {
             "1": {
               "name": "keyword.declaration.gplang"
@@ -154,6 +154,33 @@
     },
     "variables": {
       "patterns": [
+        {
+          "name": "variable.declaration.gplang",
+          "begin": "\\b(var|const|let|type)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "beginCaptures": {
+            "1": {
+              "name": "keyword.declaration.gplang"
+            },
+            "2": {
+              "name": "variable.other.declaration.gplang"
+            }
+          },
+          "end": "(?=\\n|$)",
+          "patterns": [
+            {
+              "include": "#types"
+            },
+            {
+              "include": "#strings"
+            },
+            {
+              "include": "#numbers"
+            },
+            {
+              "include": "#operators"
+            }
+          ]
+        },
         {
           "name": "variable.other.property.gplang",
           "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\.)"

@@ -9,7 +9,7 @@ func main():
     
     var start_time = Time.now()
     
-    for i in range(1, 1000001):
+    parallel for i in range(1, 1000001):
         if i % 100000 == 0:
             print("Count: " + str(i))
     

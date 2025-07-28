@@ -124,9 +124,10 @@ class GPLangCompletionProvider {
         const completions = [];
         // Keywords
         const keywords = [
-            'func', 'var', 'const', 'if', 'else', 'elif', 'while', 'for', 'in',
-            'break', 'continue', 'return', 'import', 'class', 'struct', 'enum',
-            'match', 'case', 'default', 'try', 'catch', 'finally', 'async', 'await'
+            'func', 'fun', 'fu', 'var', 'const', 'let', 'type', 'if', 'else', 'elif',
+            'while', 'for', 'in', 'break', 'continue', 'return', 'import', 'class',
+            'struct', 'enum', 'match', 'case', 'default', 'try', 'catch', 'finally',
+            'async', 'await', 'parallel'
         ];
         keywords.forEach(keyword => {
             const item = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
@@ -166,10 +167,15 @@ class GPLangHoverProvider {
         const range = document.getWordRangeAtPosition(position);
         const word = document.getText(range);
         const hoverInfo = {
-            'func': 'Define a function in GPLANG',
-            'var': 'Declare a variable',
-            'const': 'Declare a constant',
+            'func': 'Define a function in GPLANG (full keyword)',
+            'fun': 'Define a function in GPLANG (short keyword)',
+            'fu': 'Define a function in GPLANG (shortest keyword)',
+            'var': 'Declare a mutable variable',
+            'const': 'Declare a constant (immutable)',
+            'let': 'Declare a block-scoped variable',
+            'type': 'Define a custom type or type alias',
             'import': 'Import a module',
+            'parallel': 'Parallel processing for ultra-fast performance',
             'print': 'Print values to the console',
             'math': 'Mathematical operations and functions',
             'string': 'String manipulation functions',
@@ -177,8 +183,7 @@ class GPLangHoverProvider {
             'time': 'Date and time operations',
             'collections': 'Data structures and collections',
             'websocket': 'WebSocket communication',
-            'graphql': 'GraphQL client and operations',
-            'parallel': 'Parallel processing for ultra-fast performance'
+            'graphql': 'GraphQL client and operations'
         };
         if (hoverInfo[word]) {
             return new vscode.Hover(new vscode.MarkdownString(`**${word}**: ${hoverInfo[word]}`));
@@ -197,19 +202,43 @@ function updateDiagnostics(document, collection) {
     const text = document.getText();
     const lines = text.split('\n');
     lines.forEach((line, lineIndex) => {
-        // Simple syntax checking
-        if (line.includes('func') && !line.includes(':')) {
-            const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.length), 'Function declaration should end with ":"', vscode.DiagnosticSeverity.Error);
+        const trimmedLine = line.trim();
+        // Skip empty lines and comments completely
+        if (trimmedLine === '' || trimmedLine.startsWith('#')) {
+            return;
+        }
+        // Check for function declarations - must start with 'func ', 'fun ', or 'fu ' and not be a comment
+        const funcPattern = /^\s*(func|fun|fu)\s+[a-zA-Z_][a-zA-Z0-9_]*\s*\([^)]*\)\s*(.*)$/;
+        const funcMatch = funcPattern.exec(trimmedLine);
+        if (funcMatch) {
+            const afterParams = funcMatch[2].trim();
+            // Function declaration should end with ':' 
+            if (!afterParams.endsWith(':')) {
+                const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.length), 'Function declaration should end with ":"', vscode.DiagnosticSeverity.Error);
+                diagnostics.push(diagnostic);
+            }
+        }
+        // Check for variable declarations with proper syntax
+        const varPattern = /^\s*(var|const|let|type)\s+[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*.+$/;
+        if (trimmedLine.match(/^\s*(var|const|let|type)\s+[a-zA-Z_][a-zA-Z0-9_]*\s*$/) && !trimmedLine.includes('=')) {
+            const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.length), 'Variable declaration should include initialization', vscode.DiagnosticSeverity.Warning);
             diagnostics.push(diagnostic);
         }
-        // Performance hints
+        // Performance hints for for loops
         const showPerformanceHints = config.get('showPerformanceHints', true);
         if (showPerformanceHints) {
-            if (line.includes('for') && !line.includes('parallel')) {
+            // Match actual for loop syntax: "for variable in iterable:"
+            const forLoopPattern = /^\s*for\s+\w+\s+in\s+.+:/;
+            if (forLoopPattern.test(trimmedLine) && !trimmedLine.includes('parallel')) {
                 const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.length), 'Consider using "parallel for" for better performance', vscode.DiagnosticSeverity.Information);
                 diagnostic.tags = [vscode.DiagnosticTag.Unnecessary];
                 diagnostics.push(diagnostic);
             }
+        }
+        // Check for missing import statements for standard library usage
+        if (trimmedLine.includes('Time.now()') && !text.includes('import std.time')) {
+            const diagnostic = new vscode.Diagnostic(new vscode.Range(lineIndex, 0, lineIndex, line.length), 'Missing import: add "import std.time" at the top of the file', vscode.DiagnosticSeverity.Warning);
+            diagnostics.push(diagnostic);
         }
     });
     collection.set(document.uri, diagnostics);
