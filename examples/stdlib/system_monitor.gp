@@ -3,7 +3,7 @@
 # Monitors system resources and saves data to JSON
 
 import os
-import files
+import fs
 import json
 import net
 
@@ -108,11 +108,11 @@ func collect_file_system_info():
     var fs_info = json.object()
     
     # Current directory info
-    var current_dir = files.get_current_dir()
+    var current_dir = fs.get_current_dir()
     json.object_set_string(fs_info, "current_directory", current_dir)
     
     # File system statistics
-    var fs_stats = files.get_fs_info(".")
+    var fs_stats = fs.get_fs_info(".")
     if fs_stats:
         var fs_details = json.object()
         json.object_set_string(fs_details, "mount_point", fs_stats.mount_point)
@@ -125,36 +125,36 @@ func collect_file_system_info():
         json.object_set_object(fs_info, "filesystem", fs_details)
     
     # Directory listing
-    var dir_contents = files.list_dir(".")
+    var dir_contents = fs.list_dir(".")
     if dir_contents:
         var file_count = 0
         var dir_count = 0
         var total_size = 0
         
         var items = json.array()
-        var count = files.dir_count(dir_contents)
+        var count = fs.dir_count(dir_contents)
         
         for i in range(0, count):
-            var item_name = files.dir_name(dir_contents, i)
-            var item_path = files.join(".", item_name)
+            var item_name = fs.dir_name(dir_contents, i)
+            var item_path = fs.join(".", item_name)
             
-            if files.exists(item_path):
+            if fs.exists(item_path):
                 var item_info = json.object()
                 json.object_set_string(item_info, "name", item_name)
                 
-                if files.is_file(item_path):
+                if fs.is_file(item_path):
                     file_count = file_count + 1
-                    var size = files.size(item_path)
+                    var size = fs.size(item_path)
                     total_size = total_size + size
                     json.object_set_string(item_info, "type", "file")
                     json.object_set_number(item_info, "size", size)
-                elif files.is_directory(item_path):
+                elif fs.is_directory(item_path):
                     dir_count = dir_count + 1
                     json.object_set_string(item_info, "type", "directory")
                 
-                json.object_set_bool(item_info, "readable", files.is_readable(item_path))
-                json.object_set_bool(item_info, "writable", files.is_writable(item_path))
-                json.object_set_bool(item_info, "executable", files.is_executable(item_path))
+                json.object_set_bool(item_info, "readable", fs.is_readable(item_path))
+                json.object_set_bool(item_info, "writable", fs.is_writable(item_path))
+                json.object_set_bool(item_info, "executable", fs.is_executable(item_path))
                 
                 json.array_append_object(items, item_info)
         
@@ -163,7 +163,7 @@ func collect_file_system_info():
         json.object_set_number(fs_info, "directory_count", dir_count)
         json.object_set_number(fs_info, "total_size_bytes", total_size)
         
-        files.dir_free(dir_contents)
+        fs.dir_free(dir_contents)
     
     return fs_info
 
@@ -189,12 +189,12 @@ func save_report(system_data, network_data, filesystem_data):
     var filename = "system_monitor_" + timestamp + ".json"
     
     var report_json = json.stringify_pretty(report)
-    var write_result = files.write(filename, report_json)
+    var write_result = fs.write(filename, report_json)
     
     if write_result == 0:
         print("✅ Report saved to: " + filename)
         
-        var file_size = files.size(filename)
+        var file_size = fs.size(filename)
         print("Report size: " + str(file_size) + " bytes")
         
         return filename

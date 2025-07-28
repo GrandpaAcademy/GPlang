@@ -179,12 +179,12 @@ func main():
     
     # Save configuration to file
     var config_file = "gplang_config.json"
-    var write_result = files.write(config_file, config_json)
+    var write_result = fs.write(config_file, config_json)
     if write_result == 0:
         print("✅ Configuration saved to: " + config_file)
         
         # Read and parse configuration
-        var config_content = files.read(config_file)
+        var config_content = fs.read(config_file)
         if config_content:
             var loaded_config = json.parse(config_content)
             if loaded_config:
@@ -197,7 +197,7 @@ func main():
                 json.free(loaded_config)
             
         # Cleanup
-        files.delete(config_file)
+        fs.delete(config_file)
         print("✅ Cleaned up configuration file")
     
     print("")

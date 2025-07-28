@@ -4,8 +4,15 @@
 // Global module instances
 GPLangOSModule gp_os;
 GPLangNetModule gp_net;
-GPLangFilesModule gp_files;
+GPLangFSModule gp_fs;
 GPLangJsonModule gp_json;
+
+// Extended module availability flags
+bool gp_math_available = true;
+bool gp_string_available = true;
+bool gp_crypto_available = true;
+bool gp_time_available = true;
+bool gp_collections_available = true;
 
 // Global error state
 static int last_error = 0;
@@ -34,18 +41,18 @@ int gplang_stdlib_init(void) {
     gp_net.get_local_ip = net_get_local_ip;
     gp_net.ping = net_ping;
     
-    // Initialize Files module
-    gp_files.read_text = file_read_all;
-    gp_files.write_text = file_write_text;
-    gp_files.copy = file_copy;
-    gp_files.delete = file_delete;
-    gp_files.exists = file_exists;
-    gp_files.size = file_size;
-    gp_files.get_info = file_get_info;
-    gp_files.list_dir = dir_list;
-    gp_files.join_path = path_join;
-    gp_files.dirname = path_dirname;
-    gp_files.basename = path_basename;
+    // Initialize File System module
+    gp_fs.read_text = file_read_all;
+    gp_fs.write_text = file_write_text;
+    gp_fs.copy = file_copy;
+    gp_fs.delete = file_delete;
+    gp_fs.exists = file_exists;
+    gp_fs.size = file_size;
+    gp_fs.get_info = file_get_info;
+    gp_fs.list_dir = dir_list;
+    gp_fs.join_path = path_join;
+    gp_fs.dirname = path_dirname;
+    gp_fs.basename = path_basename;
     
     // Initialize JSON module (simplified for now)
     gp_json.create_object = json_create_object;
@@ -62,11 +69,41 @@ int gplang_stdlib_init(void) {
     gp_json.array_size = json_array_size;
     gp_json.destroy = json_destroy;
     gp_json.stringify = json_stringify;
-    
+
+    // Initialize extended modules
+    if (gp_math_available) {
+        // Math module is header-only, no initialization needed
+    }
+
+    if (gp_string_available) {
+        // String module is header-only, no initialization needed
+    }
+
+    if (gp_crypto_available) {
+        gp_crypto_init();
+    }
+
+    if (gp_time_available) {
+        // Time module is header-only, no initialization needed
+    }
+
+    if (gp_collections_available) {
+        gp_collections_init();
+    }
+
     return 0;
 }
 
 void gplang_stdlib_cleanup(void) {
+    // Cleanup extended modules
+    if (gp_crypto_available) {
+        gp_crypto_cleanup();
+    }
+
+    if (gp_collections_available) {
+        gp_collections_cleanup();
+    }
+
     // Cleanup any global resources
     last_error = 0;
     memset(error_buffer, 0, sizeof(error_buffer));
@@ -88,8 +125,13 @@ const char* gplang_stdlib_build_time(void) {
 // Module availability
 int gplang_has_os_module(void) { return 1; }
 int gplang_has_net_module(void) { return 1; }
-int gplang_has_files_module(void) { return 1; }
+int gplang_has_fs_module(void) { return 1; }
 int gplang_has_json_module(void) { return 1; }
+int gplang_has_math_module(void) { return gp_math_available ? 1 : 0; }
+int gplang_has_string_module(void) { return gp_string_available ? 1 : 0; }
+int gplang_has_crypto_module(void) { return gp_crypto_available ? 1 : 0; }
+int gplang_has_time_module(void) { return gp_time_available ? 1 : 0; }
+int gplang_has_collections_module(void) { return gp_collections_available ? 1 : 0; }
 
 // GPLANG OS Bindings
 char* gp_os_name(void) {
@@ -178,46 +220,63 @@ int gp_net_ping(const char* host) {
     return gp_net.ping(host, 5); // 5 second timeout
 }
 
-// GPLANG Files Bindings
-char* gp_files_read(const char* path) {
-    return gp_files.read_text(path);
+// GPLANG File System Bindings
+char* gp_fs_read(const char* path) {
+    return gp_fs.read_text(path);
 }
 
-int gp_files_write(const char* path, const char* content) {
-    return gp_files.write_text(path, content);
+int gp_fs_write(const char* path, const char* content) {
+    return gp_fs.write_text(path, content);
 }
 
-int gp_files_copy(const char* src, const char* dest) {
-    return gp_files.copy(src, dest);
+int gp_fs_copy(const char* src, const char* dest) {
+    return gp_fs.copy(src, dest);
 }
 
-int gp_files_delete(const char* path) {
-    return gp_files.delete(path);
+int gp_fs_delete(const char* path) {
+    return gp_fs.delete(path);
 }
 
-int gp_files_exists(const char* path) {
-    return gp_files.exists(path);
+int gp_fs_exists(const char* path) {
+    return gp_fs.exists(path);
 }
 
-long gp_files_size(const char* path) {
-    return gp_files.size(path);
+long gp_fs_size(const char* path) {
+    return gp_fs.size(path);
 }
 
-char* gp_files_join(const char* path1, const char* path2) {
-    return gp_files.join_path(path1, path2);
+char* gp_fs_join(const char* path1, const char* path2) {
+    return gp_fs.join_path(path1, path2);
 }
 
-char* gp_files_dirname(const char* path) {
-    return gp_files.dirname(path);
+char* gp_fs_dirname(const char* path) {
+    return gp_fs.dirname(path);
 }
 
-char* gp_files_basename(const char* path) {
-    return gp_files.basename(path);
+char* gp_fs_basename(const char* path) {
+    return gp_fs.basename(path);
 }
 
-void* gp_files_list_dir(const char* path) {
+void* gp_fs_list_dir(const char* path) {
     int count;
-    return (void*)gp_files.list_dir(path, &count);
+    return (void*)gp_fs.list_dir(path, &count);
+}
+
+int gp_fs_dir_count(void* dir_list) {
+    // This would need to be implemented properly
+    (void)dir_list;
+    return 0;
+}
+
+char* gp_fs_dir_name(void* dir_list, int index) {
+    // This would need to be implemented properly
+    (void)dir_list; (void)index;
+    return NULL;
+}
+
+void gp_fs_dir_free(void* dir_list) {
+    // This would need to be implemented properly
+    (void)dir_list;
 }
 
 // GPLANG JSON Bindings

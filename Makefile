@@ -14,6 +14,7 @@ BACKEND_DIR = $(SRC_DIR)/backend
 RUNTIME_DIR = $(SRC_DIR)/runtime
 GAP_DIR = $(SRC_DIR)/gap
 LIB_DIR = $(SRC_DIR)/lib
+OPTIMIZE_DIR = $(SRC_DIR)/optimize
 
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
@@ -35,6 +36,7 @@ BACKEND_SOURCES = $(wildcard $(BACKEND_DIR)/*.c)
 RUNTIME_SOURCES = $(wildcard $(RUNTIME_DIR)/*.c)
 GAP_SOURCES = $(wildcard $(GAP_DIR)/*.c)
 LIB_SOURCES = $(wildcard $(LIB_DIR)/*.c) $(wildcard $(LIB_DIR)/*/*.c)
+OPTIMIZE_SOURCES = $(wildcard $(OPTIMIZE_DIR)/*.c)
 MAIN_SOURCE = $(SRC_DIR)/main.c
 
 # Object files
@@ -42,10 +44,13 @@ FRONTEND_OBJECTS = $(FRONTEND_SOURCES:$(FRONTEND_DIR)/%.c=$(OBJ_DIR)/frontend/%.
 IR_OBJECTS = $(IR_SOURCES:$(IR_DIR)/%.c=$(OBJ_DIR)/ir/%.o)
 BACKEND_OBJECTS = $(BACKEND_SOURCES:$(BACKEND_DIR)/%.c=$(OBJ_DIR)/backend/%.o)
 RUNTIME_OBJECTS = $(RUNTIME_SOURCES:$(RUNTIME_DIR)/%.c=$(OBJ_DIR)/runtime/%.o)
-LIB_OBJECTS = $(OBJ_DIR)/lib/os/os.o $(OBJ_DIR)/lib/net/net.o $(OBJ_DIR)/lib/files/files.o $(OBJ_DIR)/lib/json/json.o $(OBJ_DIR)/lib/gplang_stdlib.o
+LIB_OBJECTS = $(OBJ_DIR)/lib/os/os.o $(OBJ_DIR)/lib/net/net.o $(OBJ_DIR)/lib/fs/fs.o $(OBJ_DIR)/lib/json/json.o \
+              $(OBJ_DIR)/lib/math/math.o $(OBJ_DIR)/lib/string/string.o $(OBJ_DIR)/lib/crypto/crypto.o \
+              $(OBJ_DIR)/lib/time/time.o $(OBJ_DIR)/lib/collections/collections.o $(OBJ_DIR)/lib/gplang_stdlib.o
+OPTIMIZE_OBJECTS = $(OBJ_DIR)/optimize/optimizer.o $(OBJ_DIR)/optimize/error_handler.o $(OBJ_DIR)/optimize/speed_booster.o
 MAIN_OBJECT = $(OBJ_DIR)/main.o
 
-ALL_OBJECTS = $(FRONTEND_OBJECTS) $(IR_OBJECTS) $(BACKEND_OBJECTS) $(RUNTIME_OBJECTS) $(LIB_OBJECTS) $(MAIN_OBJECT)
+ALL_OBJECTS = $(FRONTEND_OBJECTS) $(IR_OBJECTS) $(BACKEND_OBJECTS) $(RUNTIME_OBJECTS) $(LIB_OBJECTS) $(OPTIMIZE_OBJECTS) $(MAIN_OBJECT)
 
 # Main targets
 .PHONY: all build clean test docs examples help gap
@@ -57,7 +62,9 @@ build: $(BIN_DIR)/gplang $(BIN_DIR)/gap
 # Create build directories
 $(BUILD_DIR):
 	mkdir -p $(OBJ_DIR)/frontend $(OBJ_DIR)/ir $(OBJ_DIR)/backend $(OBJ_DIR)/runtime
-	mkdir -p $(OBJ_DIR)/lib/os $(OBJ_DIR)/lib/net $(OBJ_DIR)/lib/files $(OBJ_DIR)/lib/json $(OBJ_DIR)/lib
+	mkdir -p $(OBJ_DIR)/lib/os $(OBJ_DIR)/lib/net $(OBJ_DIR)/lib/fs $(OBJ_DIR)/lib/json $(OBJ_DIR)/lib
+	mkdir -p $(OBJ_DIR)/lib/math $(OBJ_DIR)/lib/string $(OBJ_DIR)/lib/crypto $(OBJ_DIR)/lib/time $(OBJ_DIR)/lib/collections
+	mkdir -p $(OBJ_DIR)/optimize
 	mkdir -p $(BIN_DIR) $(IR_OUTPUT_DIR) $(ASM_OUTPUT_DIR)
 
 # Compile frontend (lexer, parser, semantic analysis)
@@ -83,18 +90,43 @@ $(OBJ_DIR)/lib/os/os.o: $(LIB_DIR)/os/os.c | $(BUILD_DIR)
 $(OBJ_DIR)/lib/net/net.o: $(LIB_DIR)/net/net.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
 
-$(OBJ_DIR)/lib/files/files.o: $(LIB_DIR)/files/files.c | $(BUILD_DIR)
+$(OBJ_DIR)/lib/fs/fs.o: $(LIB_DIR)/fs/fs.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
 
 $(OBJ_DIR)/lib/json/json.o: $(LIB_DIR)/json/json.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
 
+$(OBJ_DIR)/lib/math/math.o: $(LIB_DIR)/math/math.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
+
+$(OBJ_DIR)/lib/string/string.o: $(LIB_DIR)/string/string.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
+
+$(OBJ_DIR)/lib/crypto/crypto.o: $(LIB_DIR)/crypto/crypto.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
+
+$(OBJ_DIR)/lib/time/time.o: $(LIB_DIR)/time/time.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
+
+$(OBJ_DIR)/lib/collections/collections.o: $(LIB_DIR)/collections/collections.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
+
 $(OBJ_DIR)/lib/gplang_stdlib.o: $(LIB_DIR)/gplang_stdlib.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -I$(LIB_DIR) -c $< -o $@
 
+# Compile optimization modules
+$(OBJ_DIR)/optimize/optimizer.o: $(OPTIMIZE_DIR)/optimizer.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(OPTIMIZE_DIR) -I$(IR_DIR) -I$(LIB_DIR) -c $< -o $@
+
+$(OBJ_DIR)/optimize/error_handler.o: $(OPTIMIZE_DIR)/error_handler.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(OPTIMIZE_DIR) -c $< -o $@
+
+$(OBJ_DIR)/optimize/speed_booster.o: $(OPTIMIZE_DIR)/speed_booster.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(OPTIMIZE_DIR) -I$(IR_DIR) -c $< -o $@
+
 # Compile main
 $(MAIN_OBJECT): $(MAIN_SOURCE) | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -I$(FRONTEND_DIR) -I$(IR_DIR) -I$(BACKEND_DIR) -I$(LIB_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(FRONTEND_DIR) -I$(IR_DIR) -I$(BACKEND_DIR) -I$(LIB_DIR) -I$(OPTIMIZE_DIR) -c $< -o $@
 
 # Link the compiler
 $(BIN_DIR)/gplang: $(ALL_OBJECTS) | $(BUILD_DIR)

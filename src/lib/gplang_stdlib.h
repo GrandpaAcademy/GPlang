@@ -7,8 +7,15 @@
 // Core system libraries
 #include "os/os.h"
 #include "net/net.h"
-#include "files/files.h"
+#include "fs/fs.h"
 #include "json/json.h"
+
+// Extended libraries
+#include "math/math.h"
+#include "string/string.h"
+#include "crypto/crypto.h"
+#include "time/time.h"
+#include "collections/collections.h"
 
 // GPLANG Standard Library Version
 #define GPLANG_STDLIB_VERSION_MAJOR 1
@@ -28,8 +35,13 @@ const char* gplang_stdlib_build_time(void);
 // Module availability checks
 int gplang_has_os_module(void);
 int gplang_has_net_module(void);
-int gplang_has_files_module(void);
+int gplang_has_fs_module(void);
 int gplang_has_json_module(void);
+int gplang_has_math_module(void);
+int gplang_has_string_module(void);
+int gplang_has_crypto_module(void);
+int gplang_has_time_module(void);
+int gplang_has_collections_module(void);
 
 // GPLANG Runtime Integration
 // These functions bridge GPLANG language constructs to C library calls
@@ -59,7 +71,7 @@ typedef struct {
     int (*ping)(const char* host, int timeout);
 } GPLangNetModule;
 
-// Files Module Integration
+// File System Module Integration
 typedef struct {
     char* (*read_text)(const char* path);
     int (*write_text)(const char* path, const char* content);
@@ -72,7 +84,7 @@ typedef struct {
     char* (*join_path)(const char* path1, const char* path2);
     char* (*dirname)(const char* path);
     char* (*basename)(const char* path);
-} GPLangFilesModule;
+} GPLangFSModule;
 
 // JSON Module Integration
 typedef struct {
@@ -96,8 +108,15 @@ typedef struct {
 // Global module instances
 extern GPLangOSModule gp_os;
 extern GPLangNetModule gp_net;
-extern GPLangFilesModule gp_files;
+extern GPLangFSModule gp_fs;
 extern GPLangJsonModule gp_json;
+
+// Extended module instances (simplified access)
+extern bool gp_math_available;
+extern bool gp_string_available;
+extern bool gp_crypto_available;
+extern bool gp_time_available;
+extern bool gp_collections_available;
 
 // GPLANG Language Bindings
 // These functions are called directly from GPLANG code
@@ -125,20 +144,20 @@ void gp_net_tcp_close(void* socket);
 char* gp_net_local_ip(void);
 int gp_net_ping(const char* host);
 
-// Files bindings
-char* gp_files_read(const char* path);
-int gp_files_write(const char* path, const char* content);
-int gp_files_copy(const char* src, const char* dest);
-int gp_files_delete(const char* path);
-int gp_files_exists(const char* path);
-long gp_files_size(const char* path);
-char* gp_files_join(const char* path1, const char* path2);
-char* gp_files_dirname(const char* path);
-char* gp_files_basename(const char* path);
-void* gp_files_list_dir(const char* path);
-int gp_files_dir_count(void* dir_list);
-char* gp_files_dir_name(void* dir_list, int index);
-void gp_files_dir_free(void* dir_list);
+// File System bindings
+char* gp_fs_read(const char* path);
+int gp_fs_write(const char* path, const char* content);
+int gp_fs_copy(const char* src, const char* dest);
+int gp_fs_delete(const char* path);
+int gp_fs_exists(const char* path);
+long gp_fs_size(const char* path);
+char* gp_fs_join(const char* path1, const char* path2);
+char* gp_fs_dirname(const char* path);
+char* gp_fs_basename(const char* path);
+void* gp_fs_list_dir(const char* path);
+int gp_fs_dir_count(void* dir_list);
+char* gp_fs_dir_name(void* dir_list, int index);
+void gp_fs_dir_free(void* dir_list);
 
 // JSON bindings
 void* gp_json_parse(const char* json_string);

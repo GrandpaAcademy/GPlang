@@ -1,5 +1,5 @@
-#ifndef GPLANG_FILES_H
-#define GPLANG_FILES_H
+#ifndef GPLANG_FS_H
+#define GPLANG_FS_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -176,4 +176,4 @@ void fs_info_destroy(FileSystemInfo** info, int count);
 char* file_get_error_string(int error_code);
 int file_get_last_error(void);
 
-#endif // GPLANG_FILES_H
+#endif // GPLANG_FS_H
