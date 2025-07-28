@@ -103,7 +103,7 @@
         },
         {
           "name": "keyword.declaration.gplang",
-          "match": "\\b(func|var|const|let|class|struct|enum|interface|trait|impl|type|alias)\\b"
+          "match": "\\b(func|fun|fu|var|const|let|class|struct|enum|interface|trait|impl|type|alias)\\b"
         },
         {
           "name": "keyword.modifier.gplang",
@@ -136,7 +136,7 @@
               "name": "entity.name.function.gplang"
             }
           },
-          "end": "(?=\\{|:)",
+          "end": ":",
           "patterns": [
             {
               "include": "#types"
@@ -145,11 +145,23 @@
               "include": "#variables"
             }
           ]
+        },
+        {
+          "name": "support.function.builtin.gplang",
+          "match": "\\b(print|len|str|int|float|range|Time\\.now)\\b"
         }
       ]
     },
     "variables": {
       "patterns": [
+        {
+          "name": "variable.other.property.gplang",
+          "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\.)"
+        },
+        {
+          "name": "entity.name.function.method.gplang",
+          "match": "(?<=\\.)([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?=\\()"
+        },
         {
           "name": "variable.other.gplang",
           "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
@@ -180,7 +192,11 @@
         },
         {
           "name": "keyword.operator.other.gplang",
-          "match": "\\?|:|\\.|\\->"
+          "match": "\\?|:|\\.|\\->|%"
+        },
+        {
+          "name": "punctuation.separator.gplang",
+          "match": "[,;]"
         }
       ]
     },
@@ -197,8 +213,12 @@
           "end": "$",
           "patterns": [
             {
+              "name": "entity.name.namespace.gplang",
+              "match": "\\b(std|math|string|crypto|time|collections|fs|os|net|json|websocket|graphql|socketio)\\b"
+            },
+            {
               "name": "string.unquoted.import.gplang",
-              "match": "[a-zA-Z_][a-zA-Z0-9_]*"
+              "match": "[a-zA-Z_][a-zA-Z0-9_]*(?:\\.[a-zA-Z_][a-zA-Z0-9_]*)*"
             },
             {
               "include": "#strings"

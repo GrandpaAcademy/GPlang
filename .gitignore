@@ -91,3 +91,10 @@ playground/
 system_monitor_*.json
 gplang_config.json
 gplang_test*
+
+
+# node releted 
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json

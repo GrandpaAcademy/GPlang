@@ -1,0 +1,187 @@
+{
+  "name": "GPLANG Dark",
+  "type": "dark",
+  "colors": {
+    "editor.background": "#1a1a1a",
+    "editor.foreground": "#e0e0e0",
+    "editorLineNumber.foreground": "#666666",
+    "editorLineNumber.activeForeground": "#ffffff",
+    "editor.selectionBackground": "#264f78",
+    "editor.inactiveSelectionBackground": "#3a3d41",
+    "editorIndentGuide.background": "#404040",
+    "editorIndentGuide.activeBackground": "#707070",
+    "editor.wordHighlightBackground": "#575757b8",
+    "editor.wordHighlightStrongBackground": "#004972b8"
+  },
+  "tokenColors": [
+    {
+      "name": "Comment",
+      "scope": [
+        "comment",
+        "punctuation.definition.comment"
+      ],
+      "settings": {
+        "fontStyle": "italic",
+        "foreground": "#6A9955"
+      }
+    },
+    {
+      "name": "GPLANG Keywords",
+      "scope": [
+        "keyword.control.gplang",
+        "keyword.declaration.gplang",
+        "keyword.modifier.gplang"
+      ],
+      "settings": {
+        "foreground": "#C586C0",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "GPLANG Function Declaration",
+      "scope": [
+        "keyword.declaration.function.gplang"
+      ],
+      "settings": {
+        "foreground": "#569CD6",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "GPLANG Function Names",
+      "scope": [
+        "entity.name.function.gplang",
+        "entity.name.function.method.gplang"
+      ],
+      "settings": {
+        "foreground": "#DCDCAA"
+      }
+    },
+    {
+      "name": "GPLANG Built-in Functions",
+      "scope": [
+        "support.function.builtin.gplang"
+      ],
+      "settings": {
+        "foreground": "#4EC9B0",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "GPLANG Strings",
+      "scope": [
+        "string.quoted.double.gplang",
+        "string.quoted.single.gplang"
+      ],
+      "settings": {
+        "foreground": "#CE9178"
+      }
+    },
+    {
+      "name": "GPLANG Numbers",
+      "scope": [
+        "constant.numeric.integer.gplang",
+        "constant.numeric.float.gplang",
+        "constant.numeric.hex.gplang",
+        "constant.numeric.binary.gplang",
+        "constant.numeric.octal.gplang"
+      ],
+      "settings": {
+        "foreground": "#B5CEA8"
+      }
+    },
+    {
+      "name": "GPLANG Constants",
+      "scope": [
+        "constant.language.gplang"
+      ],
+      "settings": {
+        "foreground": "#569CD6",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "GPLANG Variables",
+      "scope": [
+        "variable.other.gplang"
+      ],
+      "settings": {
+        "foreground": "#9CDCFE"
+      }
+    },
+    {
+      "name": "GPLANG Properties",
+      "scope": [
+        "variable.other.property.gplang"
+      ],
+      "settings": {
+        "foreground": "#9CDCFE",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "GPLANG Operators",
+      "scope": [
+        "keyword.operator.arithmetic.gplang",
+        "keyword.operator.comparison.gplang",
+        "keyword.operator.logical.gplang",
+        "keyword.operator.bitwise.gplang",
+        "keyword.operator.assignment.gplang",
+        "keyword.operator.other.gplang"
+      ],
+      "settings": {
+        "foreground": "#D4D4D4"
+      }
+    },
+    {
+      "name": "GPLANG Import Keywords",
+      "scope": [
+        "keyword.control.import.gplang"
+      ],
+      "settings": {
+        "foreground": "#C586C0",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "GPLANG Module Names",
+      "scope": [
+        "entity.name.namespace.gplang"
+      ],
+      "settings": {
+        "foreground": "#4EC9B0",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "name": "GPLANG Types",
+      "scope": [
+        "storage.type.primitive.gplang",
+        "storage.type.collection.gplang",
+        "storage.type.advanced.gplang",
+        "entity.name.type.gplang"
+      ],
+      "settings": {
+        "foreground": "#4EC9B0"
+      }
+    },
+    {
+      "name": "GPLANG Punctuation",
+      "scope": [
+        "punctuation.separator.gplang"
+      ],
+      "settings": {
+        "foreground": "#D4D4D4"
+      }
+    },
+    {
+      "name": "GPLANG Escape Characters",
+      "scope": [
+        "constant.character.escape.gplang"
+      ],
+      "settings": {
+        "foreground": "#D7BA7D"
+      }
+    }
+  ]
+}

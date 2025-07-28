@@ -2,7 +2,7 @@
   "name": "gplang",
   "displayName": "GPLANG Language Support",
   "description": "Syntax highlighting and language support for GPLANG - The fastest programming language",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "publisher": "gplang-team",
   "icon": "images/icon.png",
   "repository": {
