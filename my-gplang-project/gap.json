@@ -1,0 +1,26 @@
+{
+  "name": "my-gplang-project",
+  "version": "0.1.0",
+  "description": "A GPLANG project created with GAP v1.0.0",
+  "main": "main.gp",
+  "author": "Your Name",
+  "license": "MIT",
+  "gplang_version": "^1.0.0",
+  "dependencies": {},
+  "dev_dependencies": {},
+  "scripts": {
+    "build": "gplang compile main.gp",
+    "run": "gplang run main.gp",
+    "test": "gplang test",
+    "optimize": "gplang compile --optimization=ultra main.gp"
+  },
+  "keywords": [
+    "gplang",
+    "fast",
+    "performance"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GrandpaAcademy/GPlang.git"
+  }
+}
