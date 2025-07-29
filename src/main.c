@@ -45,6 +45,9 @@ void print_usage(const char* program_name) {
     printf("  -o, --output FILE  Output file (default: stdout)\n");
     printf("  --target ARCH      Target architecture (x86_64, arm64, riscv64)\n");
     printf("  -O, --optimize     Enable optimizations\n");
+    printf("  --lto              Enable Link-Time Optimization\n");
+    printf("  --lto=thin         Enable Thin LTO (faster compilation)\n");
+    printf("  --lto=full         Enable Full LTO (maximum optimization)\n");
     printf("  -v, --verbose      Verbose output\n");
     printf("  -h, --help         Show this help\n\n");
     printf("Examples:\n");

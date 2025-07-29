@@ -12,7 +12,7 @@ static KeywordMapping keywords[] = {
     {"while", TOKEN_WHILE}, {"for", TOKEN_FOR}, {"in", TOKEN_IN}, {"return", TOKEN_RETURN},
     {"and", TOKEN_AND}, {"or", TOKEN_OR}, {"not", TOKEN_NOT},
     {"true", TOKEN_TRUE}, {"false", TOKEN_FALSE}, {"import", TOKEN_IMPORT},
-    {"async", TOKEN_ASYNC}, {"await", TOKEN_AWAIT}, {"spawn", TOKEN_SPAWN},
+    {"unsafe", TOKEN_UNSAFE}, {"async", TOKEN_ASYNC}, {"await", TOKEN_AWAIT}, {"spawn", TOKEN_SPAWN},
     {"match", TOKEN_MATCH}, {"Some", TOKEN_SOME}, {"None", TOKEN_NONE},
     {"Ok", TOKEN_OK}, {"Err", TOKEN_ERR}, {"Option", TOKEN_OPTION}, {"Result", TOKEN_RESULT},
     {"test", TOKEN_TEST}, {"bench", TOKEN_BENCH},
@@ -263,7 +263,7 @@ Token* lexer_next_token(Lexer* lexer) {
         advance(lexer);
         if (current_char(lexer) == '=') {
             advance(lexer);
-            return token_create(TOKEN_EQUAL, "==", line, column);
+            return token_create(TOKEN_EQ, "==", line, column);
         }
         return token_create(TOKEN_ASSIGN, "=", line, column);
     }
@@ -272,7 +272,7 @@ Token* lexer_next_token(Lexer* lexer) {
         advance(lexer);
         if (current_char(lexer) == '=') {
             advance(lexer);
-            return token_create(TOKEN_NOT_EQUAL, "!=", line, column);
+            return token_create(TOKEN_NE, "!=", line, column);
         }
         return token_create(TOKEN_NOT, "!", line, column);
     }
@@ -281,18 +281,18 @@ Token* lexer_next_token(Lexer* lexer) {
         advance(lexer);
         if (current_char(lexer) == '=') {
             advance(lexer);
-            return token_create(TOKEN_LESS_EQUAL, "<=", line, column);
+            return token_create(TOKEN_LE, "<=", line, column);
         }
-        return token_create(TOKEN_LESS, "<", line, column);
+        return token_create(TOKEN_LT, "<", line, column);
     }
     
     if (ch == '>') {
         advance(lexer);
         if (current_char(lexer) == '=') {
             advance(lexer);
-            return token_create(TOKEN_GREATER_EQUAL, ">=", line, column);
+            return token_create(TOKEN_GE, ">=", line, column);
         }
-        return token_create(TOKEN_GREATER, ">", line, column);
+        return token_create(TOKEN_GT, ">", line, column);
     }
     
     // Comments
@@ -341,6 +341,7 @@ const char* token_type_to_string(TokenType type) {
         case TOKEN_FUN: return "FUN";
         case TOKEN_FU: return "FU";
         case TOKEN_VAR: return "VAR";
+        case TOKEN_CONST: return "CONST";
         case TOKEN_IF: return "IF";
         case TOKEN_ELIF: return "ELIF";
         case TOKEN_ELSE: return "ELSE";
@@ -354,6 +355,8 @@ const char* token_type_to_string(TokenType type) {
         case TOKEN_TRUE: return "TRUE";
         case TOKEN_FALSE: return "FALSE";
         case TOKEN_IMPORT: return "IMPORT";
+        case TOKEN_PARALLEL: return "PARALLEL";
+        case TOKEN_UNSAFE: return "UNSAFE";
         case TOKEN_ASYNC: return "ASYNC";
         case TOKEN_AWAIT: return "AWAIT";
         case TOKEN_SPAWN: return "SPAWN";
@@ -396,13 +399,14 @@ const char* token_type_to_string(TokenType type) {
         case TOKEN_MULTIPLY: return "MULTIPLY";
         case TOKEN_DIVIDE: return "DIVIDE";
         case TOKEN_MODULO: return "MODULO";
+        case TOKEN_POWER: return "POWER";
         case TOKEN_ASSIGN: return "ASSIGN";
-        case TOKEN_EQUAL: return "EQUAL";
-        case TOKEN_NOT_EQUAL: return "NOT_EQUAL";
-        case TOKEN_LESS: return "LESS";
-        case TOKEN_LESS_EQUAL: return "LESS_EQUAL";
-        case TOKEN_GREATER: return "GREATER";
-        case TOKEN_GREATER_EQUAL: return "GREATER_EQUAL";
+        case TOKEN_EQ: return "EQ";
+        case TOKEN_NE: return "NE";
+        case TOKEN_LT: return "LT";
+        case TOKEN_LE: return "LE";
+        case TOKEN_GT: return "GT";
+        case TOKEN_GE: return "GE";
         case TOKEN_ARROW: return "ARROW";
         case TOKEN_LEFT_PAREN: return "LEFT_PAREN";
         case TOKEN_RIGHT_PAREN: return "RIGHT_PAREN";

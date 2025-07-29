@@ -106,7 +106,7 @@ int analyze_memory_safety(void) {
     printf("🔒 Analyzing memory safety (Rust-like ownership)...\n");
     
     // Check ownership rules
-    if (check_ownership_rules() != 0) {
+    if (check_compiler_ownership_rules() != 0) {
         printf("❌ Ownership violation detected\n");
         return -1;
     }
@@ -128,9 +128,9 @@ int analyze_memory_safety(void) {
 }
 
 /*
- * Check ownership rules (like Rust)
+ * Check compiler ownership rules (like Rust)
  */
-int check_ownership_rules(void) {
+int check_compiler_ownership_rules(void) {
     // Rule 1: Each value has exactly one owner
     // Rule 2: When owner goes out of scope, value is dropped
     // Rule 3: Move semantics prevent use-after-move
