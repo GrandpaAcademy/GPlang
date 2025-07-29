@@ -4,8 +4,11 @@
 VERSION = 1.0.0
 CC = gcc
 CXX = g++
-CFLAGS = -O3 -march=native -mtune=native -flto -ffast-math -DNDEBUG -DVERSION=\"$(VERSION)\"
-CXXFLAGS = $(CFLAGS) -std=c++17
+# Native compilation flags for zero overhead
+CFLAGS = -O3 -march=native -mtune=native -flto -ffast-math -DNDEBUG -DVERSION=\"$(VERSION)\" \
+         -fno-exceptions -fno-rtti -fno-stack-protector -fomit-frame-pointer \
+         -mavx2 -mfma -mbmi2 -mlzcnt -mpopcnt
+CXXFLAGS = $(CFLAGS) -std=c++17 -fno-exceptions -fno-rtti
 LDFLAGS = -flto -s -lm -lpthread
 AS = as
 LD = ld
@@ -41,6 +44,8 @@ RUNTIME_SOURCES = $(wildcard $(RUNTIME_DIR)/*.c)
 GAP_SOURCES = $(wildcard $(GAP_DIR)/*.c)
 LIB_SOURCES = $(wildcard $(LIB_DIR)/*.c) $(wildcard $(LIB_DIR)/*/*.c)
 OPTIMIZE_SOURCES = $(wildcard $(OPTIMIZE_DIR)/*.c)
+NATIVE_SOURCES = $(wildcard $(SRC_DIR)/compiler/*.c)
+SAFETY_SOURCES = $(wildcard $(SRC_DIR)/safety/*.c)
 MAIN_SOURCE = $(SRC_DIR)/main.c
 
 # Object files
@@ -52,9 +57,11 @@ LIB_OBJECTS = $(OBJ_DIR)/lib/os/os.o $(OBJ_DIR)/lib/net/net.o $(OBJ_DIR)/lib/fs/
               $(OBJ_DIR)/lib/math/math.o $(OBJ_DIR)/lib/string/string.o $(OBJ_DIR)/lib/crypto/crypto.o \
               $(OBJ_DIR)/lib/time/time.o $(OBJ_DIR)/lib/collections/collections.o $(OBJ_DIR)/lib/gplang_stdlib.o
 OPTIMIZE_OBJECTS = $(OBJ_DIR)/optimize/optimizer.o $(OBJ_DIR)/optimize/error_handler.o $(OBJ_DIR)/optimize/speed_booster.o
+NATIVE_OBJECTS = $(OBJ_DIR)/compiler/native_compiler.o
+SAFETY_OBJECTS = $(OBJ_DIR)/safety/memory_safety.o
 MAIN_OBJECT = $(OBJ_DIR)/main.o
 
-ALL_OBJECTS = $(FRONTEND_OBJECTS) $(IR_OBJECTS) $(BACKEND_OBJECTS) $(RUNTIME_OBJECTS) $(LIB_OBJECTS) $(OPTIMIZE_OBJECTS) $(MAIN_OBJECT)
+ALL_OBJECTS = $(FRONTEND_OBJECTS) $(IR_OBJECTS) $(BACKEND_OBJECTS) $(RUNTIME_OBJECTS) $(LIB_OBJECTS) $(OPTIMIZE_OBJECTS) $(NATIVE_OBJECTS) $(SAFETY_OBJECTS) $(MAIN_OBJECT)
 
 # Main targets
 .PHONY: all build clean test docs examples help gap
@@ -69,7 +76,7 @@ $(BUILD_DIR):
 	@mkdir -p $(OBJ_DIR)/frontend $(OBJ_DIR)/ir $(OBJ_DIR)/backend $(OBJ_DIR)/runtime
 	@mkdir -p $(OBJ_DIR)/lib/os $(OBJ_DIR)/lib/net $(OBJ_DIR)/lib/fs $(OBJ_DIR)/lib/json $(OBJ_DIR)/lib
 	@mkdir -p $(OBJ_DIR)/lib/math $(OBJ_DIR)/lib/string $(OBJ_DIR)/lib/crypto $(OBJ_DIR)/lib/time $(OBJ_DIR)/lib/collections
-	@mkdir -p $(OBJ_DIR)/optimize
+	@mkdir -p $(OBJ_DIR)/optimize $(OBJ_DIR)/compiler $(OBJ_DIR)/safety
 	@mkdir -p $(BIN_DIR) $(IR_OUTPUT_DIR) $(ASM_OUTPUT_DIR)
 
 # Compile frontend (lexer, parser, semantic analysis)
@@ -129,9 +136,17 @@ $(OBJ_DIR)/optimize/error_handler.o: $(OPTIMIZE_DIR)/error_handler.c | $(BUILD_D
 $(OBJ_DIR)/optimize/speed_booster.o: $(OPTIMIZE_DIR)/speed_booster.c | $(BUILD_DIR)
 	$(CC) $(CFLAGS) -I$(OPTIMIZE_DIR) -I$(IR_DIR) -c $< -o $@
 
+# Compile native compiler modules
+$(OBJ_DIR)/compiler/native_compiler.o: $(SRC_DIR)/compiler/native_compiler.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(SRC_DIR)/compiler -I$(SRC_DIR)/safety -c $< -o $@
+
+# Compile memory safety modules
+$(OBJ_DIR)/safety/memory_safety.o: $(SRC_DIR)/safety/memory_safety.c | $(BUILD_DIR)
+	$(CC) $(CFLAGS) -I$(SRC_DIR)/safety -c $< -o $@
+
 # Compile main
 $(MAIN_OBJECT): $(MAIN_SOURCE) | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -I$(FRONTEND_DIR) -I$(IR_DIR) -I$(BACKEND_DIR) -I$(LIB_DIR) -I$(OPTIMIZE_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) -I$(FRONTEND_DIR) -I$(IR_DIR) -I$(BACKEND_DIR) -I$(LIB_DIR) -I$(OPTIMIZE_DIR) -I$(SRC_DIR)/compiler -I$(SRC_DIR)/safety -c $< -o $@
 
 # Link the compiler
 $(BIN_DIR)/gplang: $(ALL_OBJECTS) | $(BUILD_DIR)
